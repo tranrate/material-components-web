@@ -21,6 +21,11 @@
       .mdc-toolbar-demo {
         margin: 0px;
       }
+      .mdc-toolbar__row:first-child::after {
+        background-image: url("../images/4-3-2.jpg");
+        background-size: cover;
+        background-position: center;
+      }
       .demo-paragraph {
         margin: 0px;
         padding: 20px 28px;
@@ -42,7 +47,7 @@
     <script src="../assets/material-components-web.css.js" charset="utf-8"></script>
   </head>
   <body class="mdc-typography mdc-toolbar-demo">
-    <header class="mdc-toolbar mdc-toolbar--fixed">
+    <header class="mdc-toolbar mdc-toolbar--fixed mdc-toolbar--flexible mdc-toolbar--flexible-default-behavior">
       <div class="mdc-toolbar__row">
         <section class="mdc-toolbar__section mdc-toolbar__section--align-start">
           <a class="material-icons">menu</a>
@@ -64,13 +69,16 @@
         <p class="demo-paragraph">
           Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. Aenean ultricies mi vitae est. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. Aenean ultricies mi vitae est.
         </p>
+        <p class="demo-paragraph">
+          Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. Aenean ultricies mi vitae est. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. Aenean ultricies mi vitae est.
+        </p>
       </div>
     </main>
     <script src="../assets/material-components-web.js" charset="utf-8"></script>
     <script type="text/javascript">
       setTimeout(function() {
         mdc.toolbar.MDCToolbar.attachTo(document.querySelector('.mdc-toolbar'));
-      }, 250);
+      }, 1000);
     </script>
   </body>
 </html>
