@@ -43,6 +43,8 @@ export default class MDCDialogFoundation extends MDCFoundation {
       deregisterDocumentKeydownHandler: (/* handler: EventListener */) => {},
       registerFocusTrappingHandler: (/* handler: EventListener */) => {},
       deregisterFocusTrappingHandler: (/* handler: EventListener */) => {},
+      registerTransitionEndHandler: (/* handler: EventListener */) => {},
+      deregisterTransitionEndHandler: (/* handler: EventListener */) => {},
       numFocusableTargets: () => /* number */ 0,
       setDialogFocusFirstTarget: () => {},
       setInitialFocus: () => {},
@@ -56,6 +58,7 @@ export default class MDCDialogFoundation extends MDCFoundation {
       setFocusedTarget: (/* target: EventTarget */) => {},
       notifyAccept: () => {},
       notifyCancel: () => {},
+      isDialog: (/* el: Element */) => /* boolean */ false,
     };
   }
 
@@ -74,11 +77,30 @@ export default class MDCDialogFoundation extends MDCFoundation {
         this.cancel(true);
       }
     };
+    
+    this.transitionEndHandler_ = (ev) => {
+      if (this.adapter_.isDialog(ev.target)) {
+        this.adapter_.deregisterTransitionEndHandler(this.transitionEndHandler_);
+        this.enableScroll_();
+        this.adapter_.rmBodyAttr('aria-hidden');
+        this.adapter_.setAttr('aria-hidden', 'true');
+        if (this.lastFocusedTarget_) {
+          this.adapter_.setFocusedTarget(this.lastFocusedTarget_);
+        }
+        this.lastFocusedTarget_ = null; 
+      }
+    };
   }
 
   destroy() {
     // Ensure that dialog is cleaned up when destroyed
-    this.close();
+    if (this.isOpen_) {
+      this.adapter_.deregisterSurfaceInteractionHandler('click', this.dialogClickHandler_);
+      this.adapter_.deregisterDocumentKeydownHandler(this.documentKeydownHandler_);
+      this.adapter_.deregisterInteractionHandler('click', this.componentClickHandler_);
+      this.adapter_.deregisterFocusTrappingHandler(this.focusHandler_);
+      this.enableScroll_();
+    }
   }
 
   open() {
@@ -103,15 +125,9 @@ export default class MDCDialogFoundation extends MDCFoundation {
     this.adapter_.deregisterDocumentKeydownHandler(this.documentKeydownHandler_);
     this.adapter_.deregisterInteractionHandler('click', this.componentClickHandler_);
     this.adapter_.deregisterFocusTrappingHandler(this.focusHandler_);
+    this.adapter_.registerTransitionEndHandler(this.transitionEndHandler_);
     this.adapter_.removeClass(MDCDialogFoundation.cssClasses.OPEN);
-    this.enableScroll_();
-    this.adapter_.rmBodyAttr('aria-hidden');
-    this.adapter_.setAttr('aria-hidden', 'true');
-
-    if (this.lastFocusedTarget_) {
-      this.adapter_.setFocusedTarget(this.lastFocusedTarget_);
-    }
-    this.lastFocusedTarget_ = null;
+    this.isOpen_ = false;
   }
 
   isOpen() {
