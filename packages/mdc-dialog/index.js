@@ -85,6 +85,8 @@ export class MDCDialog extends MDCComponent {
       deregisterDocumentKeydownHandler: (handler) => document.removeEventListener('keydown', handler),
       registerFocusTrappingHandler: (handler) => document.addEventListener('focus', handler, true),
       deregisterFocusTrappingHandler: (handler) => document.removeEventListener('focus', handler, true),
+      registerTransitionEndHandler: (handler) => this.dialogSurface.addEventListener('transitionend', handler),
+      deregisterTransitionEndHandler: (handler) => this.dialogSurface.removeEventListener('transitionend', handler),
       numFocusableTargets: () => this.dialogSurface_.querySelectorAll(FOCUSABLE_ELEMENTS).length,
       setDialogFocusFirstTarget: () => this.dialogSurface_.querySelectorAll(FOCUSABLE_ELEMENTS)[0].focus(),
       setInitialFocus: () => this.acceptButton_.focus(),
@@ -98,6 +100,7 @@ export class MDCDialog extends MDCComponent {
       setFocusedTarget: (target) => target.focus(),
       notifyAccept: () => this.emit('MDCDialog:accept'),
       notifyCancel: () => this.emit('MDCDialog:cancel'),
+      isDialog: (el) => el === this.dialogSurface,
     });
   }
 }
